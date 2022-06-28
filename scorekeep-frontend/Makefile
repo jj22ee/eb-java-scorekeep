@@ -24,7 +24,7 @@ tag: package check-env
 	docker tag scorekeep-frontend:latest $(ECR_REPO)
 
 login: check-region
-	@$(shell aws ecr get-login --no-include-email --region $(AWS_REGION))
+	@$(shell aws ecr get-login-password --region $(AWS_REGION))
 
 publish: tag login check-env
 	docker push $(ECR_REPO)

@@ -29,7 +29,7 @@ run-local: package check-env
 	docker run -d -v ~/.aws/:/root/.aws/:ro --net=host -e AWS_REGION=$(AWS_REGION) -e NOTIFICATION_TOPIC=arn:aws:sns:$(AWS_REGION):$(ACCOUNT_ID):scorekeep-notifications scorekeep-api
 
 login: check-region
-	@$(shell aws ecr get-login --no-include-email --region $(AWS_REGION))
+	@$(shell aws ecr get-login-password --region $(AWS_REGION))
 
 publish: tag login check-env
 	docker push $(ECR_REPO)
