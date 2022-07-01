@@ -9,4 +9,6 @@ stack: check-region
 	aws --region $(AWS_REGION) cloudformation create-stack --stack-name scorekeep --capabilities "CAPABILITY_NAMED_IAM" --template-body file://cf-resources.yaml
 
 clean: check-region
+	aws ecr batch-delete-image --repository-name scorekeep-api --image-ids imageTag=latest
+	aws ecr batch-delete-image --repository-name scorekeep-frontend --image-ids imageTag=latest
 	aws --region $(AWS_REGION) cloudformation delete-stack --stack-name scorekeep

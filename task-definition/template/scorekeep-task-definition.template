@@ -1,12 +1,11 @@
 {
     "family": "scorekeep",
-    "networkMode":"awsvpc",
      "containerDefinitions": [
          {
           "name": "scorekeep-frontend",                                                          
           "image": "$$ACCOUNT_ID$$.dkr.ecr.$$REGION$$.amazonaws.com/scorekeep-frontend",
-          "cpu": 64,
-          "memoryReservation": 512,
+          "cpu": 250,
+          "memoryReservation": 300,
           "portMappings" : [
               {
                   "containerPort": 8080
@@ -24,11 +23,12 @@
          {
           "name": "scorekeep-api",                                                          
           "image": "$$ACCOUNT_ID$$.dkr.ecr.$$REGION$$.amazonaws.com/scorekeep-api",
-          "cpu": 192,
-          "memoryReservation": 512,
+          "cpu": 250,
+          "memoryReservation": 350,
           "environment": [
               { "name" : "AWS_REGION", "value" : "$$REGION$$" },
-              { "name" : "NOTIFICATION_TOPIC", "value" : "arn:aws:sns:$$REGION$$:$$ACCOUNT_ID$$:scorekeep-notifications" }
+              { "name" : "NOTIFICATION_TOPIC", "value" : "arn:aws:sns:$$REGION$$:$$ACCOUNT_ID$$:scorekeep-notifications" },
+              { "name" : "AWS_XRAY_DAEMON_ADDRESS", "value" : "127.0.0.1:2000" }
           ],
           "portMappings" : [
               {
@@ -47,10 +47,11 @@
           {
             "name": "xray-daemon",
             "image": "amazon/aws-xray-daemon",
-            "cpu": 32,
-            "memoryReservation": 256,
+            "cpu": 250,
+            "memoryReservation": 200,
             "portMappings" : [
                 {
+                    "hostPort": 0,
                     "containerPort": 2000,
                     "protocol": "udp"
                 }
@@ -60,8 +61,8 @@
     "executionRoleArn": "arn:aws:iam::$$ACCOUNT_ID$$:role/scorekeepExecutionRole",
     "taskRoleArn": "arn:aws:iam::$$ACCOUNT_ID$$:role/scorekeepRole",
     "requiresCompatibilities": [
-        "FARGATE"
+        "EC2"
     ],
-    "cpu": ".25 vcpu",
-    "memory": "1 gb"
+    "cpu": "1 vcpu",
+    "memory": "900"
 }
