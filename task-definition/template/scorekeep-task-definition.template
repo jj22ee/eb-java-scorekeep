@@ -43,7 +43,19 @@
                   "awslogs-stream-prefix": "scorekeep/api"
               }
           }
-         }
+         },
+          {
+            "name": "xray-daemon",
+            "image": "amazon/aws-xray-daemon",
+            "cpu": 32,
+            "memoryReservation": 256,
+            "portMappings" : [
+                {
+                    "containerPort": 2000,
+                    "protocol": "udp"
+                }
+            ]
+          }
     ],
     "executionRoleArn": "arn:aws:iam::$$ACCOUNT_ID$$:role/scorekeepExecutionRole",
     "taskRoleArn": "arn:aws:iam::$$ACCOUNT_ID$$:role/scorekeepRole",

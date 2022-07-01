@@ -5,6 +5,7 @@ import javax.servlet.Filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.amazonaws.xray.javax.servlet.AWSXRayServletFilter;
 
 @Configuration
 public class WebConfig {
@@ -13,6 +14,11 @@ public class WebConfig {
   @Bean
   public Filter SimpleCORSFilter() {
     return new SimpleCORSFilter();
+  }
+
+  @Bean
+  public Filter TracingFilter() {
+    return new AWSXRayServletFilter("Scorekeep");
   }
 
   static {
