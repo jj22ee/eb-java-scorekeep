@@ -123,6 +123,7 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
         - "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+        - "arn:aws:iam::aws:policy/AWSXrayFullAccess"
       RoleName: "scorekeepRole"
   PubPrivateVPC:
     Type: 'AWS::EC2::VPC'

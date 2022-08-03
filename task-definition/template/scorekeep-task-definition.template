@@ -1,11 +1,12 @@
 {
     "family": "scorekeep",
+    "networkMode":"awsvpc",
      "containerDefinitions": [
          {
           "name": "scorekeep-frontend",                                                          
           "image": "$$ACCOUNT_ID$$.dkr.ecr.$$REGION$$.amazonaws.com/scorekeep-frontend",
-          "cpu": 250,
-          "memoryReservation": 300,
+          "cpu": 64,
+          "memoryReservation": 256,
           "portMappings" : [
               {
                   "containerPort": 8080
@@ -23,12 +24,11 @@
          {
           "name": "scorekeep-api",                                                          
           "image": "$$ACCOUNT_ID$$.dkr.ecr.$$REGION$$.amazonaws.com/scorekeep-api",
-          "cpu": 250,
-          "memoryReservation": 350,
+          "cpu": 128,
+          "memoryReservation": 512,
           "environment": [
               { "name" : "AWS_REGION", "value" : "$$REGION$$" },
-              { "name" : "NOTIFICATION_TOPIC", "value" : "arn:aws:sns:$$REGION$$:$$ACCOUNT_ID$$:scorekeep-notifications" },
-              { "name" : "AWS_XRAY_DAEMON_ADDRESS", "value" : "127.0.0.1:2000" }
+              { "name" : "NOTIFICATION_TOPIC", "value" : "arn:aws:sns:$$REGION$$:$$ACCOUNT_ID$$:scorekeep-notifications" }
           ],
           "portMappings" : [
               {
@@ -47,22 +47,29 @@
           {
             "name": "xray-daemon",
             "image": "amazon/aws-xray-daemon",
-            "cpu": 250,
-            "memoryReservation": 200,
+            "cpu": 32,
+            "memoryReservation": 256,
             "portMappings" : [
                 {
-                    "hostPort": 0,
                     "containerPort": 2000,
                     "protocol": "udp"
                 }
-            ]
+            ],
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "scorekeep",
+                  "awslogs-region": "$$REGION$$",
+                  "awslogs-stream-prefix": "scorekeep/xray"
+              }
+          }
           }
     ],
     "executionRoleArn": "arn:aws:iam::$$ACCOUNT_ID$$:role/scorekeepExecutionRole",
     "taskRoleArn": "arn:aws:iam::$$ACCOUNT_ID$$:role/scorekeepRole",
     "requiresCompatibilities": [
-        "EC2"
+        "FARGATE"
     ],
-    "cpu": "1 vcpu",
-    "memory": "900"
+    "cpu": ".25 vcpu",
+    "memory": "1 gb"
 }
