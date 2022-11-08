@@ -33,9 +33,6 @@ public class WebConfig {
   static {
     AWSXRayRecorderBuilder builder = AWSXRayRecorderBuilder.standard().withPlugin(new ECSPlugin()).withPlugin(new EC2Plugin());
 
-    URL ruleFile = WebConfig.class.getResource("/sampling-rules.json");
-    builder.withSamplingStrategy(new LocalizedSamplingStrategy(ruleFile));
-
     AWSXRay.setGlobalRecorder(builder.build());
 
     AWSXRay.beginSegment("Scorekeep");
